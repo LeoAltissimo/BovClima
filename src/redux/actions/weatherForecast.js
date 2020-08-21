@@ -10,7 +10,7 @@ export const getWeatherForcast = (lat, long) => async (dispath, getState) => {
   try {
     dispath({ type: 'WEATHER_GET_LOADING' });
 
-    if (isOnline && false) {
+    if (isOnline) {
       const atualData = await getAtualWeatherForecast(lat, long);
       const sotorageFormat = {
         date: Date.now(),
@@ -34,7 +34,7 @@ export const getWeatherForcast = (lat, long) => async (dispath, getState) => {
       }
     }
   } catch (e) {
-    console.error("ERRO", e);
+    console.error('ERRO', e);
 
     const cacheData = await AsyncStorage.getItem('@weatherForcast');
     if (cacheData) {

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
 
 import { setTempScale } from '../../redux/actions/system';
 
@@ -28,9 +29,37 @@ import {
 
 export default () => {
   const dipatch = useDispatch();
-  const { weatherForecast } = useSelector((store) => store.weatherForecast);
+  const {
+    weatherForecast,
+    usingCashedData,
+    lastUpdate,
+  } = useSelector((store) => store.weatherForecast);
   const { tempScale } = useSelector((store) => store.system);
+  const [showWeatherDetails, setShowWeatherDetails] = useState(true);
   const atualCondition = weatherForecast?.current?.weather[0]?.main;
+
+  const getConextTemp = () => {
+    if (usingCashedData && weatherForecast) {
+      let returnValue = null;
+      if (moment().diff(lastUpdate, 'd') > 1) {
+        setShowWeatherDetails(false);
+        weatherForecast?.daily.forEach((weatherItem) => {
+          if (moment.unix(weatherItem.dt).isSame(Date.now(), 'd')) {
+            returnValue = weatherItem?.temp?.day;
+          }
+        });
+      } else {
+        weatherForecast?.hourly.forEach((weatherItem) => {
+          if (moment.unix(weatherItem.dt).isSame(Date.now(), 'h')) {
+            returnValue = weatherItem?.temp;
+          }
+        });
+      }
+      return returnValue;
+    }
+
+    return weatherForecast?.current?.temp;
+  };
 
   return (
     <MainContainer>
@@ -39,7 +68,7 @@ export default () => {
           name={handleWeatherIcon(atualCondition)}
         />
         <Temperature>
-          {tempConverter(weatherForecast?.current?.temp, tempScale)}
+          {tempConverter(getConextTemp(), tempScale)}
           º
         </Temperature>
         <MetricSelectorContainer>
@@ -55,38 +84,42 @@ export default () => {
         {handleWeatherDescription(atualCondition)}
       </SkyCondition>
 
-      <DetailsConainer>
-        <DetailItem>
-          <DetailIcon name="weather-windy" />
-          <DetailDataContainer>
-            <DetailLabel>Vento</DetailLabel>
-            <DetailValue>{`${weatherForecast?.current?.wind_speed || '--'} Km/h`}</DetailValue>
-          </DetailDataContainer>
-        </DetailItem>
-        <DetailItem>
-          <DetailIcon name="thermometer" />
-          <DetailDataContainer>
-            <DetailLabel>Sensação</DetailLabel>
-            <DetailValue>
-              {`${tempConverter(weatherForecast?.current?.feels_like, tempScale)}º`}
-            </DetailValue>
-          </DetailDataContainer>
-        </DetailItem>
-        <DetailItem>
-          <DetailIcon name="weather-sunny" />
-          <DetailDataContainer>
-            <DetailLabel>Índice UV</DetailLabel>
-            <DetailValue>{weatherForecast?.current?.uvi || '--'}</DetailValue>
-          </DetailDataContainer>
-        </DetailItem>
-        <DetailItem>
-          <DetailIcon name="speedometer" />
-          <DetailDataContainer>
-            <DetailLabel>Pressão</DetailLabel>
-            <DetailValue>{`${weatherForecast?.current?.pressure || '--'} hPa`}</DetailValue>
-          </DetailDataContainer>
-        </DetailItem>
-      </DetailsConainer>
+      {showWeatherDetails && (
+        <DetailsConainer>
+          <DetailItem>
+            <DetailIcon name="weather-windy" />
+            <DetailDataContainer>
+              <DetailLabel>Vento</DetailLabel>
+              <DetailValue>{`${weatherForecast?.current?.wind_speed || '--'} Km/h`}</DetailValue>
+            </DetailDataContainer>
+          </DetailItem>
+          <DetailItem>
+            <DetailIcon name="thermometer" />
+            <DetailDataContainer>
+              <DetailLabel>Sensação</DetailLabel>
+              <DetailValue>
+                {`${tempConverter(weatherForecast?.current?.feels_like, tempScale)}º`}
+              </DetailValue>
+            </DetailDataContainer>
+          </DetailItem>
+          <DetailItem>
+            <DetailIcon name="weather-sunny" />
+            <DetailDataContainer>
+              <DetailLabel>Índice UV</DetailLabel>
+              <DetailValue>
+                {(!usingCashedData && weatherForecast?.current?.uvi) || '--'}
+              </DetailValue>
+            </DetailDataContainer>
+          </DetailItem>
+          <DetailItem>
+            <DetailIcon name="speedometer" />
+            <DetailDataContainer>
+              <DetailLabel>Pressão</DetailLabel>
+              <DetailValue>{`${weatherForecast?.current?.pressure || '--'} hPa`}</DetailValue>
+            </DetailDataContainer>
+          </DetailItem>
+        </DetailsConainer>
+      )}
     </MainContainer>
   );
 };
