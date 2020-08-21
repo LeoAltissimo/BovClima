@@ -14,9 +14,7 @@ export const Title = Styled.Text`
   margin: 12px;
 `;
 
-export const ForecastScrollContainer = Styled.ScrollView`
-
-`;
+export const ForecastScrollContainer = Styled.ScrollView``;
 
 export const ForecastContainer = Styled.View`
   display: flex;

@@ -48,7 +48,7 @@ export default () => {
 
   return (
     <MainContainer>
-      <Title>Próximos Dias</Title>
+      <Title>Próximos dias</Title>
       <ForecastScrollContainer horizontal>
         {renderWeatherList()}
       </ForecastScrollContainer>

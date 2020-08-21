@@ -25,7 +25,7 @@ export default () => {
       <AlterContainer>
         <AalertIcon name="md-alert" size={24} />
         <AlterText>
-          Conceda permissão para o app verificar sua localização
+          Conceda permissão para o serviço informar o clima da sua localização
         </AlterText>
       </AlterContainer>
     );
@@ -39,7 +39,7 @@ export default () => {
 
   if (isOnline && !usingCashedData && lastUpdate) {
     return (
-      <LastUpdate>{`Última atualizacao as: ${moment.tz(lastUpdate, 'America/Sao_Paulo').format('h:mm') || '-- --'}`}</LastUpdate>
+      <LastUpdate>{`Última atualização  as: ${moment.tz(lastUpdate, 'America/Sao_Paulo').format('h:mm') || '-- --'}`}</LastUpdate>
     );
   }
 
@@ -49,8 +49,8 @@ export default () => {
         <AalertIcon name="md-alert" size={24} />
         <AlterText>
           {usingCashedData
-            ? `Esta sem conecxão com a internet, ultimos dados coletados em: ${moment.tz(lastUpdate, 'America/Sao_Paulo').format('DD/MM h:mm') || '-- --'}`
-            : 'Seu dispositivo esta offline e não possuimos nenhum dado previamente salvo.'}
+            ? `Esta sem conexão com a internet, últimos dados coletados em: ${moment.tz(lastUpdate, 'America/Sao_Paulo').format('DD/MM h:mm') || '-- --'}`
+            : 'O dispositivo está off-line, não existe nenhum dado previamente salvo.'}
         </AlterText>
       </AlterContainer>
     );

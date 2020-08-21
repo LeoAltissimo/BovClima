@@ -11,7 +11,7 @@ const Store = createStore(
     weatherForecast,
     system,
   }),
-  applyMiddleware(thunk)
+  applyMiddleware(thunk, logger)
 );
 
 export default Store;

@@ -34,8 +34,6 @@ export const getWeatherForcast = (lat, long) => async (dispath, getState) => {
       }
     }
   } catch (e) {
-    console.error('ERRO', e);
-
     const cacheData = await AsyncStorage.getItem('@weatherForcast');
     if (cacheData) {
       const cacheDataObj = JSON.parse(cacheData);
