@@ -6,8 +6,8 @@ import Home from './src/Pages/home';
 export default function App() {
   return (
     <>
+      <StatusBar style="light" />
       <Home />
-      <StatusBar style="auto" />
     </>
   );
 }

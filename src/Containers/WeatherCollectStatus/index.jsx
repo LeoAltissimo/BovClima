@@ -1,5 +1,4 @@
 import React from 'react';
-import { Feather } from '@expo/vector-icons';
 
 // import IconFactory from '../../Components/IconFactory';
 import {
@@ -18,7 +17,7 @@ export default () => {
 
   return (
     <AlterContainer>
-      <AalertIcon name="alert-circle" size={24} />
+      <AalertIcon name="md-alert" size={24} />
       <AlterText>
         Esta sem conecxão com a internet, ultimos dados coletados dia 11/04/2020
       </AlterText>

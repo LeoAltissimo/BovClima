@@ -24,5 +24,6 @@ module.exports = {
     'react/prop-types': 'off',
     'comma-dangle': 'off',
     'linebreak-style': 'off',
+    'import/prefer-default-export': 'off'
   },
 };
