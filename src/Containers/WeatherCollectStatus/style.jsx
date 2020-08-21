@@ -11,7 +11,7 @@ export const LastUpdate = Styled.Text`
 export const AlterContainer = Styled.View`
   background-color: #fff1e5;
   border-radius: 6px;
-  padding: 12px 16px;
+  padding: 12px 26px 12px 16px;
   margin: 12px;
   display: flex;
   flex-direction: row;

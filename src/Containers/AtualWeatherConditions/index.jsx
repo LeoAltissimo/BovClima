@@ -1,4 +1,13 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { setTempScale } from '../../redux/actions/system';
+
+import tempConverter from '../../utils/tempConvert';
+import {
+  handleWeatherIcon,
+  handleWeatherDescription,
+} from '../../utils/weatherDescription';
 
 import {
   MainContainer,
@@ -18,51 +27,63 @@ import {
 } from './style';
 
 export default () => {
-  const teste = 0;
+  const dipatch = useDispatch();
+  const { weatherForecast } = useSelector((store) => store.weatherForecast);
+  const { tempScale } = useSelector((store) => store.system);
+  const atualCondition = weatherForecast?.current?.weather[0]?.main;
 
   return (
     <MainContainer>
       <TemperatureRow>
-        <WeatherConditionIcon name="weather-cloudy" />
-        <Temperature>21º</Temperature>
+        <WeatherConditionIcon
+          name={handleWeatherIcon(atualCondition)}
+        />
+        <Temperature>
+          {tempConverter(weatherForecast?.current?.temp, tempScale)}
+          º
+        </Temperature>
         <MetricSelectorContainer>
-          <MetricOtionBtn>
-            <MetricOtionTxt active>C</MetricOtionTxt>
+          <MetricOtionBtn onPress={() => dipatch(setTempScale('C'))}>
+            <MetricOtionTxt active={tempScale === 'C'}>C</MetricOtionTxt>
           </MetricOtionBtn>
-          <MetricOtionBtn>
-            <MetricOtionTxt>F</MetricOtionTxt>
+          <MetricOtionBtn onPress={() => dipatch(setTempScale('F'))}>
+            <MetricOtionTxt active={tempScale === 'F'}>F</MetricOtionTxt>
           </MetricOtionBtn>
         </MetricSelectorContainer>
       </TemperatureRow>
-      <SkyCondition>Parcialmente, nublado</SkyCondition>
+      <SkyCondition>
+        {handleWeatherDescription(atualCondition)}
+      </SkyCondition>
 
       <DetailsConainer>
         <DetailItem>
           <DetailIcon name="weather-windy" />
           <DetailDataContainer>
             <DetailLabel>Vento</DetailLabel>
-            <DetailValue>teste 1</DetailValue>
+            <DetailValue>{`${weatherForecast?.current?.wind_speed || '--'} Km/h`}</DetailValue>
           </DetailDataContainer>
         </DetailItem>
         <DetailItem>
           <DetailIcon name="thermometer" />
           <DetailDataContainer>
             <DetailLabel>Sensação</DetailLabel>
-            <DetailValue>teste 1</DetailValue>
+            <DetailValue>
+              {`${tempConverter(weatherForecast?.current?.feels_like, tempScale)}º`}
+            </DetailValue>
           </DetailDataContainer>
         </DetailItem>
         <DetailItem>
           <DetailIcon name="weather-sunny" />
           <DetailDataContainer>
             <DetailLabel>Índice UV</DetailLabel>
-            <DetailValue>teste 1</DetailValue>
+            <DetailValue>{weatherForecast?.current?.uvi || '--'}</DetailValue>
           </DetailDataContainer>
         </DetailItem>
         <DetailItem>
           <DetailIcon name="speedometer" />
           <DetailDataContainer>
             <DetailLabel>Pressão</DetailLabel>
-            <DetailValue>teste 1</DetailValue>
+            <DetailValue>{`${weatherForecast?.current?.pressure || '--'} hPa`}</DetailValue>
           </DetailDataContainer>
         </DetailItem>
       </DetailsConainer>

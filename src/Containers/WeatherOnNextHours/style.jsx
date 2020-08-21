@@ -25,6 +25,12 @@ export const ForecastContainer = Styled.View`
   margin: 12px;
   padding: 12px;
   max-width: 100px;
+
+  ${({ isNow }) => isNow && `
+    border: 1px solid #0180cc;
+    border-radius: 12px;
+    background-color: #ffffff57;
+  `}
 `;
 
 export const ForecastHour = Styled.Text`
